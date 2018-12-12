@@ -15,6 +15,7 @@ namespace Zara
     public partial class avtoriz : Form
     {
         podklclss _CC;
+        string id_sotr;
         public avtoriz()
         {
             InitializeComponent();
@@ -66,6 +67,55 @@ namespace Zara
         private void avtoriz_FormClosed(object sender, FormClosedEventArgs e)
         {
             
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            panel2.Visible = true;
+        }
+
+        private void label5_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button3_Click_1(object sender, EventArgs e)
+        {
+            if (maskedTextBox5.Text == " -" || maskedTextBox4.Text == "")
+            {
+                MessageBox.Show("Не все поля заполнены!");
+            }
+            else
+            {
+                _CC = new podklclss();
+                _CC.Set_Connection();
+                _CC.conection.Open();
+                SqlCommand newCMD = new SqlCommand("Select * from [dbo].[sotrud] where [login] ='" + maskedTextBox5.Text + "' and [slovo] = '" + maskedTextBox4.Text + "'", _CC.conection);
+                SqlDataAdapter sda = new SqlDataAdapter(newCMD);
+                DataTable dt = new DataTable();
+                sda.Fill(dt);
+
+                if (dt.Rows.Count == 1)
+                {
+                    
+                    panel1.Visible = true;
+
+                    _CC = new podklclss();
+                    _CC.Set_Connection();
+                    _CC.conection.Open();
+                    SqlCommand cmd = new SqlCommand("Select * from [dbo].[sotrud](parol) where [login] ='" + maskedTextBox5.Text + _CC.conection);
+                    
+                    int result = ((int)cmd.ExecuteScalar());
+                    _CC.conection.Close();
+                    maskedTextBox3.Text = Convert.ToString(result);
+                 
+                                       
+                }
+                else
+                {
+                    MessageBox.Show("Неверные данные");
+                }
+            }
         }
     }
 }
